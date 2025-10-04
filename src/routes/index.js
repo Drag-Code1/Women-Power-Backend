@@ -13,7 +13,8 @@ const product_router = require("./product-route");
 const product_review_router = require("./product-review-route");
 const image_router = require("./image-route");
 const cart_item_router = require("./cart-item-route");
-const order_router = require('./order-route');
+const order_router = require("./order-route");
+const dashboard_router = require("./dashboard-route");
 
 const router = express.Router();
 
@@ -31,5 +32,6 @@ router.use("/product-review", product_review_router);
 router.use("/banner", image_router);
 router.use("/cart", cart_item_router);
 router.use("/order", order_router);
+router.use("/dashboard", dashboard_router);
 
 module.exports = router;

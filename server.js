@@ -20,7 +20,7 @@ app.use(errorHandler);
     console.log("Database connected...");
 
     //check user cerate Date-time
-    sequelize.sync({ force: true});
+    // sequelize.sync({ force: true});
     console.log("All models synced.");
 
     const PORT = process.env.PORT || 5000;
