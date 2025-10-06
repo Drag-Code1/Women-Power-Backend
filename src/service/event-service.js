@@ -55,6 +55,16 @@ class EventService {
       throw error;
     }
   }
+
+  //5.get by Id
+  async getEventById(id) {
+    try {
+      const response = await this.eventRepo.get(id);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
-module.exports = EventService ;
+module.exports = EventService;

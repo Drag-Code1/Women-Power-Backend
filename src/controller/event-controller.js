@@ -52,6 +52,18 @@ class EventController {
       next(error);
     }
   }
+
+  //5.get by id
+  async getEventById(req, res, next) {
+    try {
+      const response = await eventServ.getEventById(req.params.id);
+      return res
+        .status(StatusCodes.OK)
+        .json(success(response, "Event details"));
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 module.exports = new EventController();

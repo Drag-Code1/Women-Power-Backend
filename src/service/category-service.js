@@ -55,6 +55,16 @@ class CategoryService {
       throw error;
     }
   }
+
+  //5.get by Id
+  async getCategoryById(id) {
+    try {
+      const response = await this.categoryRepo.get(id);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
-module.exports = CategoryService ;
+module.exports = CategoryService;

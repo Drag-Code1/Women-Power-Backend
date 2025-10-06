@@ -53,6 +53,18 @@ class CategoryController {
       next(error);
     }
   }
+
+  //5.get by id
+  async getCategoryById(req, res, next) {
+    try {
+      const response = await catgServ.getCategoryById(req.params.id);
+      return res
+        .status(StatusCodes.OK)
+        .json(success(response, "category details"));
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 module.exports = new CategoryController();

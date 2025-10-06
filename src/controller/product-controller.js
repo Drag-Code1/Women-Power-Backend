@@ -20,7 +20,8 @@ class ProductController {
   //2.get All products
   async getAllProducts(req, res, next) {
     try {
-      const response = await productServ.getAllProducts();
+      const page = parseInt(req.query.page);
+      const response = await productServ.getAllProducts(page);
       return res
         .status(StatusCodes.OK)
         .json(success(response, "All products retrived"));
@@ -61,6 +62,43 @@ class ProductController {
         success: true,
         data: response,
       });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  //5.get All products by filter
+  async getProductsFilter(req, res, next) {
+    try {
+      const response = await productServ.getProductsFilter(req.body);
+      return res
+        .status(StatusCodes.OK)
+        .json(success(response, "All filtered products retrived"));
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  //6.search Products
+  async searchProducts(req, res, next) {
+    try {
+      const response = await productServ.searchProducts(req.params.search);
+      return res.status(StatusCodes.OK).json({
+        success: true,
+        data: response,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  //7.get trendin products
+  async getTrendingProducts(req, res, next) {
+    try {
+      const response = await productServ.getTrandingProducts();
+      return res
+        .status(StatusCodes.OK)
+        .json(success(response, "trnding products"));
     } catch (error) {
       next(error);
     }

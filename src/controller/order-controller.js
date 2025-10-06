@@ -16,6 +16,30 @@ class OrderController {
       next(error);
     }
   }
+
+  //2.get orders by userId
+  async getOrders(req, res, next) {
+    try {
+      const response = await orderServ.getOrders(req.params.id);
+      return res
+        .status(StatusCodes.OK)
+        .json(success(response, "All orders retrived"));
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  //3.get all orders by userId
+  async getAllOrders(req, res, next) {
+    try {
+      const response = await orderServ.getAllOrders();
+      return res
+        .status(StatusCodes.OK)
+        .json(success(response, "All orders retrived"));
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 module.exports = new OrderController();

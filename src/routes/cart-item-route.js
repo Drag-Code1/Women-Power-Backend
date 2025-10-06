@@ -5,7 +5,7 @@ const CartItemController = require("../controller/cart-item-controller");
 router.post("/", (req, res, next) =>
   CartItemController.createNewItem(req, res, next)
 );
-router.get("/", (req, res, next) =>
+router.get("/:id", (req, res, next) =>
   CartItemController.getAllCartItems(req, res, next)
 );
 router.put("/:id", (req, res, next) =>

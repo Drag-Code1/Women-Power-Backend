@@ -21,9 +21,10 @@ class ArtistService {
   }
 
   //2.get All Artist
-  async getAllArtists() {
+  async getAllArtists(page) {
     try {
-      const response = await this.artistRepo.getAll();
+      const limit = 8;
+      const response = await this.artistRepo.getAllArtists(page, limit);
       return response;
     } catch (error) {
       throw new AppError(
@@ -33,13 +34,29 @@ class ArtistService {
     }
   }
 
-  //3.get All Artist by categoryId
-  async getAllArtistsByCategory(catg_id) {
+  //3.get All Artist by filter
+  async getArtistsFilter(data) {
+    const { categories, experience } = data;
+
     try {
-      const response = await this.artistRepo.getAllByCatgId(catg_id);
-      return response;
+      // Fetch all artists for the given category IDs in parallel
+      const artistsByCategory = await Promise.all(
+        categories.map((catId) => this.artistRepo.getAllByCatgId(catId))
+      );
+
+      // Flatten the array of arrays
+      const allArtists = artistsByCategory.flat();
+
+      // Filter based on experience
+      const filteredArtists = allArtists.filter(
+        (artist) =>
+          artist.experience >= experience.minExp &&
+          artist.experience <= experience.maxExp
+      );
+
+      return filteredArtists;
     } catch (error) {
-      throw error ;
+      throw error;
     }
   }
 
@@ -63,6 +80,19 @@ class ArtistService {
       return response;
     } catch (error) {
       throw error;
+    }
+  }
+
+  //5.Search artists
+  async searchArtists(name) {
+    try {
+      const response = await this.artistRepo.searchByName(name);
+      return response;
+    } catch (error) {
+      throw new AppError(
+        "failed to fetch searched artists",
+        StatusCodes.INTERNAL_SERVER_ERROR
+      );
     }
   }
 }

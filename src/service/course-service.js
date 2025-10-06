@@ -55,6 +55,16 @@ class CourseService {
       throw error;
     }
   }
+
+    //5.get by Id
+  async getCourseById(id) {
+    try {
+      const response = await this.courseRepo.get(id);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 module.exports = CourseService ;

@@ -19,8 +19,9 @@ class ArtistController {
 
   //2.get All Artists
   async getAllArtists(req, res, next) {
+    const page = parseInt(req.query.page);
     try {
-      const response = await artistServ.getAllArtists();
+      const response = await artistServ.getAllArtists(page);
       return res
         .status(StatusCodes.OK)
         .json(success(response, "All artists retrived"));
@@ -30,12 +31,12 @@ class ArtistController {
   }
 
   //3.get All Artists by category
-  async getAllArtistsByCategory(req, res, next) {
+  async getArtistFilter(req, res, next) {
     try {
-      const response = await artistServ.getAllArtistsByCategory(req.params.id);
+      const response = await artistServ.getArtistsFilter(req.body);
       return res
         .status(StatusCodes.OK)
-        .json(success(response, "All artists retrived by category"));
+        .json(success(response, "All filtered artists retrived"));
     } catch (error) {
       next(error);
     }
@@ -57,6 +58,19 @@ class ArtistController {
   async deleteArtist(req, res, next) {
     try {
       const response = await artistServ.deleteArtist(req.params.id);
+      return res.status(StatusCodes.OK).json({
+        success: true,
+        data: response,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  //5.search artists
+  async searchArtists(req, res, next) {
+    try {
+      const response = await artistServ.searchArtists(req.params.name);
       return res.status(StatusCodes.OK).json({
         success: true,
         data: response,

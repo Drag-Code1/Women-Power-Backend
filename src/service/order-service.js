@@ -2,7 +2,7 @@ const OrderRepository = require("../repository/OrderRepository");
 const OrderItemRepository = require("../repository/OrderItemRepository");
 const { StatusCodes } = require("http-status-codes");
 const AppError = require("../utils/errors/AppError");
-const { sequelize } = require('../models');
+const { sequelize } = require("../models");
 
 class OrderService {
   constructor() {
@@ -36,6 +36,26 @@ class OrderService {
         "Failed to create order.",
         StatusCodes.INTERNAL_SERVER_ERROR
       );
+    }
+  }
+
+  //2.get orders by user id
+  async getOrders(userId) {
+    try {
+      const response = await this.orderRepo.getAllByUserId(userId);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  //3.get all orders
+  async getAllOrders() {
+    try {
+      const response = await this.orderRepo.getAllRecent();
+      return response;
+    } catch (error) {
+      throw error;
     }
   }
 }

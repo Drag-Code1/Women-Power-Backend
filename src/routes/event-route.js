@@ -14,5 +14,8 @@ router.put("/:id", (req, res, next) =>
 router.delete("/:id", (req, res, next) =>
   EventController.deleteEvent(req, res, next)
 );
+router.get("/:id", (req, res, next) =>
+  EventController.getEventById(req, res, next)
+);
 
 module.exports = router;

@@ -31,9 +31,10 @@ class ProductService {
   }
 
   //3.Get all products
-  async getAllProducts() {
+  async getAllProducts(page) {
     try {
-      const response = await this.productRepo.getAllProducts();
+      const limit = 16;
+      const response = await this.productRepo.getAllProducts(page, limit);
       return response;
     } catch (error) {
       throw new AppError(
@@ -62,6 +63,62 @@ class ProductService {
       throw error;
     }
   }
+
+  //6.get All Products by filter
+  async getProductsFilter(data) {
+    const { categories = [], price = { minPrice: 0, maxPrice: 0 } } = data;
+
+    try {
+      let allProducts;
+
+      // Check if categories array has any values
+      if (Array.isArray(categories) && categories.length > 0) {
+        const productsByCategory = await Promise.all(
+          categories.map((catId) => this.productRepo.getAllByCatgId(catId))
+        );
+        allProducts = productsByCategory.flat();
+      } else {
+        // No categories provided, fetch all products
+        allProducts = await this.productRepo.getAll();
+      }
+
+      // Filter based on price only if maxPrice is not 0
+      let filteredProducts = allProducts;
+      if (price.maxPrice !== 0) {
+        filteredProducts = allProducts.filter(
+          (product) =>
+            product.price >= price.minPrice && product.price <= price.maxPrice
+        );
+      }
+
+      return filteredProducts;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  //5.Search products
+  async searchProducts(search) {
+    try {
+      const response = await this.productRepo.searchByName(search);
+      return response;
+    } catch (error) {
+      throw new AppError(
+        "failed to fetch searched products",
+        StatusCodes.INTERNAL_SERVER_ERROR
+      );
+    }
+  }
+
+  //6.get tranding products
+  async getTrandingProducts() {
+    try {
+      const response = await this.productRepo.getTrendingP();
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
-module.exports = ProductService ;
+module.exports = ProductService;

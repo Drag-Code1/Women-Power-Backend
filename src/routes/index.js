@@ -15,6 +15,7 @@ const image_router = require("./image-route");
 const cart_item_router = require("./cart-item-route");
 const order_router = require("./order-route");
 const dashboard_router = require("./dashboard-route");
+const wishlist_router = require("./wishlist-route");
 
 const router = express.Router();
 
@@ -33,5 +34,6 @@ router.use("/banner", image_router);
 router.use("/cart", cart_item_router);
 router.use("/order", order_router);
 router.use("/dashboard", dashboard_router);
+router.use("/wishlist", wishlist_router);
 
 module.exports = router;

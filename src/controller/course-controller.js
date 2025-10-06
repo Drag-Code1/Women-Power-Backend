@@ -52,6 +52,18 @@ class CourseController {
       next(error);
     }
   }
+
+  //5.get by id
+  async getCourseById(req, res, next) {
+    try {
+      const response = await courseServ.getCourseById(req.params.id);
+      return res
+        .status(StatusCodes.OK)
+        .json(success(response, "Course details"));
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 module.exports = new CourseController();
