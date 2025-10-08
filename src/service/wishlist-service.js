@@ -39,10 +39,7 @@ class WishListService {
       const response = await this.wishRepo.getAllProductByUserId(id);
       return response;
     } catch (error) {
-      throw new AppError(
-        "fail to retrive products from wish list",
-        StatusCodes.INTERNAL_SERVER_ERROR
-      );
+      throw error;
     }
   }
 }

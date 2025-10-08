@@ -17,6 +17,17 @@ class ArtistController {
     }
   }
 
+  async getArtistDetails(req, res, next) {
+    try {
+      const response = await artistServ.getArtistById(req.params.id);
+      return res
+        .status(StatusCodes.OK)
+        .json(success(response, "Artist retrived"));
+    } catch (error) {
+      next(error);
+    }
+  }
+
   //2.get All Artists
   async getAllArtists(req, res, next) {
     const page = parseInt(req.query.page);

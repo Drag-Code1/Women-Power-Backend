@@ -20,6 +20,16 @@ class ArtistService {
     }
   }
 
+  // Get Artist details by ID
+  async getArtistById(id) {
+    try {
+      const response = await this.artistRepo.get(id);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   //2.get All Artist
   async getAllArtists(page) {
     try {

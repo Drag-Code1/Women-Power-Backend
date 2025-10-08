@@ -29,7 +29,7 @@ class OrderController {
     }
   }
 
-  //3.get all orders by userId
+  //3.get all orders
   async getAllOrders(req, res, next) {
     try {
       const response = await orderServ.getAllOrders();

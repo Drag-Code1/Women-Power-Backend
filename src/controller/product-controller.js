@@ -103,6 +103,29 @@ class ProductController {
       next(error);
     }
   }
+
+  //8.get products by catg id
+  async getProductsByCatgId(req, res, next) {
+    try {
+      const response = await productServ.getProductsByCatgId(req.params.id);
+      return res
+        .status(StatusCodes.OK)
+        .json(success(response, "Related products"));
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async getArtistProducts(req, res, next) {
+    try {
+      const response = await productServ.getProductsByArtistId(req.params.id);
+      return res
+        .status(StatusCodes.OK)
+        .json(success(response, "Artist Related products"));
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 module.exports = new ProductController();

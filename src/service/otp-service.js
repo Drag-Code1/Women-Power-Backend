@@ -1,10 +1,14 @@
 const OtpRepository = require("../repository/OtpRepository");
+const UserRepo = require("../repository/UserRepository");
 const { StatusCodes } = require("http-status-codes");
 const AppError = require("../utils/errors/AppError");
+const jwt = require("jsonwebtoken");
+const { JWT_SECRET, JWT_EXPIRES_IN } = require("../config/config");
 
 class OtpService {
   constructor() {
     this.otpRepository = new OtpRepository();
+    this.userRepo = new UserRepo();
   }
 
   async addNewOrUpdate(data) {
@@ -23,9 +27,11 @@ class OtpService {
     try {
       const response = await this.otpRepository.get(data.email);
 
+      const user = await this.userRepo.getUserByMail(data.email);
+
       const { expiry, otp } = response.get();
 
-      const diffMinutes = (new Date() - expiry) / (1000 * 60);
+      const diffMinutes = (new Date() - new Date(expiry)) / (1000 * 60);
 
       if (diffMinutes > 5) {
         return {
@@ -38,13 +44,21 @@ class OtpService {
         return { login: false, message: "Invalid OTP." };
       }
 
-      return { login: true, message: "OTP verified successfully!" };
+      const token = this.generateToken(user);
+      const info = { user, token };
+      return { info, message: "OTP verified successfully!" };
     } catch (error) {
       throw new AppError(
-        "No OTP found. Please request a new one.",
+        "Error!!, Please request a new one.",
         StatusCodes.INTERNAL_SERVER_ERROR
       );
     }
+  }
+
+  generateToken(user) {
+    return jwt.sign({ id: user.id, role: user.role }, JWT_SECRET, {
+      expiresIn: JWT_EXPIRES_IN,
+    });
   }
 }
 

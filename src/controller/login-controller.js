@@ -38,7 +38,7 @@ class LoginController {
       const response = await otpServ.validateOtp(req.body);
       return res
         .status(StatusCodes.OK)
-        .json(success(response.login, response.message));
+        .json(success(response, response.message));
     } catch (error) {
       next(error);
     }

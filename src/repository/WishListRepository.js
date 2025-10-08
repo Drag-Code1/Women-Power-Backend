@@ -24,6 +24,11 @@ class WishListRepository extends CrudRepository {
       return response;
     } catch (error) {
       console.error("Error fetching wishlist items:", error);
+      if (error instanceof AppError) {
+        throw error;
+      }
+
+      // Wrap unknown errors
       throw new AppError(
         "Failed to load wishlist",
         StatusCodes.INTERNAL_SERVER_ERROR

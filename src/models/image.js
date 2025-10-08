@@ -25,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       type: {
-        type: DataTypes.STRING, // or ENUM("banner", "thumbnail", "gallery") if limited types
+        type: DataTypes.STRING,
         allowNull: false,
       },
     },

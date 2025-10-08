@@ -94,6 +94,20 @@ class ProductRepository extends CrudRepository {
       );
     }
   }
+
+  async getProdutsByArtistId(id) {
+    try {
+      const response = await this.model.findAll({
+        where: { artist_id: id },
+      });
+      return response;
+    } catch (error) {
+      throw new AppError(
+        "Failed to fetch Artist products",
+        StatusCodes.INTERNAL_SERVER_ERROR
+      );
+    }
+  }
 }
 
 module.exports = ProductRepository;

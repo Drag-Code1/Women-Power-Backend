@@ -119,6 +119,26 @@ class ProductService {
       throw error;
     }
   }
+
+  //get products by  catg id
+  async getProductsByCatgId(id) {
+    try {
+      const response = await this.productRepo.getAllByCatgId(id);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  //get by artist id
+  async getProductsByArtistId(id) {
+    try {
+      const response = await this.productRepo.getProdutsByArtistId(id);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 module.exports = ProductService;

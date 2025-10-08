@@ -1,12 +1,15 @@
 const express = require("express");
 const router = express.Router();
 const OrderController = require("../controller/order-controller");
+const auth = require("../middleware/auth-middleware");
 
-router.post("/", (req, res, next) => OrderController.newOrder(req, res, next));
-router.get("/:id", (req, res, next) =>
+router.post("/", auth("user"), (req, res, next) =>
+  OrderController.newOrder(req, res, next)
+);
+router.get("/:id", auth("user"), (req, res, next) =>
   OrderController.getOrders(req, res, next)
 );
-router.get("/", (req, res, next) =>
+router.get("/", auth("admin"), (req, res, next) =>
   OrderController.getAllOrders(req, res, next)
 );
 
