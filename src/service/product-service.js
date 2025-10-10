@@ -31,10 +31,14 @@ class ProductService {
   }
 
   //3.Get all products
-  async getAllProducts(page) {
+  async getAllProducts(page, userId) {
     try {
       const limit = 16;
-      const response = await this.productRepo.getAllProducts(page, limit);
+      const response = await this.productRepo.getAllProducts(
+        page,
+        limit,
+        userId
+      );
       return response;
     } catch (error) {
       throw new AppError(
@@ -134,6 +138,15 @@ class ProductService {
   async getProductsByArtistId(id) {
     try {
       const response = await this.productRepo.getProdutsByArtistId(id);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async bestSellerProducts(userId = null) {
+    try {
+      const response = await this.productRepo.getBestSellerProducts(userId, 12);
       return response;
     } catch (error) {
       throw error;

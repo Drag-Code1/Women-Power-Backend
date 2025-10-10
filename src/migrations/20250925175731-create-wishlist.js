@@ -22,9 +22,16 @@ module.exports = {
         onDelete: "CASCADE",
       },
     });
+
+    await queryInterface.addConstraint("wish_list", {
+      fields: ["user_id", "product_id"],
+      type: "unique",
+      name: "unique_user_product",
+    });
   },
 
   async down(queryInterface, Sequelize) {
+    await queryInterface.removeConstraint("wish_list", "unique_user_product");
     await queryInterface.dropTable("wish_list");
   },
 };

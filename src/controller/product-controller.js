@@ -21,7 +21,8 @@ class ProductController {
   async getAllProducts(req, res, next) {
     try {
       const page = parseInt(req.query.page);
-      const response = await productServ.getAllProducts(page);
+      const userId = req.user ? req.user.id : null;
+      const response = await productServ.getAllProducts(page, userId);
       return res
         .status(StatusCodes.OK)
         .json(success(response, "All products retrived"));
@@ -122,6 +123,18 @@ class ProductController {
       return res
         .status(StatusCodes.OK)
         .json(success(response, "Artist Related products"));
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async bestSellerProducts(req, res, next) {
+    try {
+      const userId = req.user ? req.user.id : null;
+      const response = await productServ.bestSellerProducts(userId);
+      return res
+        .status(StatusCodes.OK)
+        .json(success(response, "Top 12 best seller products"));
     } catch (error) {
       next(error);
     }

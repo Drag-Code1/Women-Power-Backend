@@ -2,11 +2,12 @@ const express = require("express");
 const router = express.Router();
 const ProductController = require("../controller/product-controller");
 const auth = require("../middleware/auth-middleware");
+const optionalAuth = require("../middleware/optional-auth");
 
 router.post("/", auth("admin"), (req, res, next) =>
   ProductController.createProduct(req, res, next)
 );
-router.get("/", (req, res, next) =>
+router.get("/", optionalAuth, (req, res, next) =>
   ProductController.getAllProducts(req, res, next)
 );
 router.get("/artist/:id", (req, res, next) =>
@@ -17,6 +18,9 @@ router.post("/filter", (req, res, next) =>
 );
 router.get("/trending", (req, res, next) =>
   ProductController.getTrendingProducts(req, res, next)
+);
+router.get("/best-seller", (req, res, next) =>
+  ProductController.bestSellerProducts(req, res, next)
 );
 router.get("/:id", (req, res, next) =>
   ProductController.getProductDetails(req, res, next)

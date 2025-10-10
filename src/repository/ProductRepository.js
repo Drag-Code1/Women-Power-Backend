@@ -9,19 +9,41 @@ class ProductRepository extends CrudRepository {
     super(Product);
   }
 
-  async getAllProducts(page, limit) {
+  async getAllProducts(page, limit, userId = null) {
     const offset = (page - 1) * limit;
     try {
+      const attributes = [
+        "id",
+        "p_Name",
+        "thumbnail",
+        "category_id",
+        "price",
+        "discount",
+        "isTrending",
+      ];
+
+      if (userId) {
+        attributes.push([
+          this.model.sequelize.literal(`
+          EXISTS (
+            SELECT 1 
+            FROM wish_list w 
+            WHERE w.product_id = Product.id 
+              AND w.user_id = '${userId}'
+          )
+        `),
+          "is_in_wishlist",
+        ]);
+      } else {
+        // For guests → always false
+        attributes.push([
+          this.model.sequelize.literal(`FALSE`),
+          "is_in_wishlist",
+        ]);
+      }
+
       const { count, rows } = await this.model.findAndCountAll({
-        attributes: [
-          "id",
-          "p_Name",
-          "thumbnail",
-          "category_id",
-          "price",
-          "discount",
-          "isTrending",
-        ],
+        attributes,
         offset,
         limit,
       });
@@ -30,7 +52,10 @@ class ProductRepository extends CrudRepository {
         totalItems: count,
         totalPages: Math.ceil(count / limit),
         currentPage: page,
-        data: rows,
+        data: rows.map((p) => ({
+          ...p.toJSON(),
+          is_in_wishlist: Boolean(p.getDataValue("is_in_wishlist")),
+        })),
       };
     } catch (error) {
       throw new AppError(
@@ -104,6 +129,56 @@ class ProductRepository extends CrudRepository {
     } catch (error) {
       throw new AppError(
         "Failed to fetch Artist products",
+        StatusCodes.INTERNAL_SERVER_ERROR
+      );
+    }
+  }
+
+  async getBestSellerProducts(userId = null, limit = 12) {
+    try {
+      const attributes = [
+        "id",
+        "p_Name",
+        "thumbnail",
+        "category_id",
+        "price",
+        "discount",
+        "isTrending",
+      ];
+
+      if (userId) {
+        attributes.push([
+          this.model.sequelize.literal(`
+          EXISTS (
+            SELECT 1 
+            FROM wish_list w 
+            WHERE w.product_id = Product.id 
+              AND w.user_id = '${userId}'
+          )
+        `),
+          "is_in_wishlist",
+        ]);
+      } else {
+        attributes.push([
+          this.model.sequelize.literal("FALSE"),
+          "is_in_wishlist",
+        ]);
+      }
+
+      const products = await this.model.findAll({
+        order: [["sell_count", "DESC"]],
+        limit,
+        attributes,
+      });
+
+      // Ensure is_in_wishlist is boolean
+      return products.map((p) => ({
+        ...p.toJSON(),
+        is_in_wishlist: Boolean(p.getDataValue("is_in_wishlist")),
+      }));
+    } catch (error) {
+      throw new AppError(
+        "Failed to fetch best seller products",
         StatusCodes.INTERNAL_SERVER_ERROR
       );
     }

@@ -43,6 +43,12 @@ module.exports = (sequelize, DataTypes) => {
       modelName: "Wishlist",
       tableName: "wish_list",
       timestamps: false,
+      indexes: [
+        {
+          unique: true,
+          fields: ["user_id", "product_id"],
+        },
+      ],
     }
   );
 
