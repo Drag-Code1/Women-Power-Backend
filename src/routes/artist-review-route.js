@@ -6,7 +6,7 @@ const auth = require("../middleware/auth-middleware");
 router.post("/", auth("user"), (req, res, next) =>
   ArtistReviewController.createArtistReview(req, res, next)
 );
-router.get("/:id", auth(), (req, res, next) =>
+router.get("/:id", (req, res, next) =>
   ArtistReviewController.getArtistReviews(req, res, next)
 );
 router.put("/:id", auth("user"), (req, res, next) =>

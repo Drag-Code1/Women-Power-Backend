@@ -44,28 +44,37 @@ class ArtistService {
     }
   }
 
-  //3.get All Artist by filter
+  // 3. Get All Artists by Filter
   async getArtistsFilter(data) {
-    const { categories, experience } = data;
+    const {
+      categories = [],
+      experience = { minExp: 0, maxExp: 0 },
+    } = data;
 
     try {
-      // Fetch all artists for the given category IDs in parallel
-      const artistsByCategory = await Promise.all(
-        categories.map((catId) => this.artistRepo.getAllByCatgId(catId))
-      );
+      let allArtists;
 
-      // Flatten the array of arrays
-      const allArtists = artistsByCategory.flat();
+      if (Array.isArray(categories) && categories.length > 0) {
+        const artistsByCategory = await Promise.all(
+          categories.map((catId) => this.artistRepo.getAllByCatgId(catId))
+        );
+        allArtists = artistsByCategory.flat();
+      } else {
+        allArtists = await this.artistRepo.getAll();
+      }
 
-      // Filter based on experience
-      const filteredArtists = allArtists.filter(
-        (artist) =>
-          artist.experience >= experience.minExp &&
-          artist.experience <= experience.maxExp
-      );
+      let filteredArtists = allArtists;
+      if (experience.maxExp > 0) {
+        filteredArtists = allArtists.filter(
+          (artist) =>
+            artist.experience >= experience.minExp &&
+            artist.experience <= experience.maxExp
+        );
+      }
 
       return filteredArtists;
     } catch (error) {
+      console.error("Error filtering artists:", error);
       throw error;
     }
   }
