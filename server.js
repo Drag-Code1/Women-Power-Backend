@@ -6,6 +6,8 @@ const api_routes = require("./src/routes");
 const errorHandler = require("./src/middleware/errorHandler");
 
 app.use(express.json());
+const cors = require("cors");
+app.use(cors());
 
 app.get("/", (req, res) => {
   res.send("Server is running!");
