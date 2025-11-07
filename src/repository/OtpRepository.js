@@ -1,5 +1,7 @@
 const { OTP } = require("../models");
 const CrudRepository = require("./CrudRepository");
+const AppError = require("../utils/errors/AppError");
+const { StatusCodes } = require("http-status-codes");
 
 class OtpRepository extends CrudRepository {
   constructor() {

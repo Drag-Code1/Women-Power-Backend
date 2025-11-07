@@ -11,12 +11,15 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-transporter.verify((error, success) => {
-  if (error) {
-    console.error("Email server connection failed:", error);
-  } else {
-    console.log("Email server ready to send messages");
-  }
-});
+// Verify transporter only in non-production environments
+if (process.env.NODE_ENV !== 'production') {
+  transporter.verify((error, success) => {
+    if (error) {
+      console.error("Email server connection failed:", error);
+    } else {
+      console.log("Email server ready to send messages");
+    }
+  });
+}
 
 module.exports = transporter;

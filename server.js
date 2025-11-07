@@ -1,64 +1,66 @@
-require("dotenv").config();
-const express = require("express");
-const { sequelize, User } = require("./src/models"); // Import User model
-const api_routes = require("./src/routes");
-const errorHandler = require("./src/middleware/errorHandler");
-const cors = require("cors");
+require('dotenv').config();
+const express = require('express');
+const cors = require('cors');
+
+const { sequelize, User } = require('./src/models');
+const apiRoutes = require('./src/routes');
+const errorHandler = require('./src/middleware/errorHandler');
 
 const app = express();
-app.use(express.json());
+
+// Limit body sizes to avoid memory spikes from large payloads
+app.use(express.json({ limit: '200kb' }));
+app.use(express.urlencoded({ extended: true, limit: '200kb' }));
 app.use(cors());
 
 // Default route
-app.get("/", (req, res) => {
-  res.send("Server is running!");
+app.get('/', (req, res) => {
+  res.send('Server is running!');
 });
 
 // API routes
-app.use("/v1", api_routes);
+app.use('/v1', apiRoutes);
 
-// Error handler
+// Error handler (keep last)
 app.use(errorHandler);
 
 (async () => {
   try {
     // Connect to DB
     await sequelize.authenticate();
-    console.log("✅ Database connected...");
+    console.log('Database connected...');
 
-
-    await sequelize.sync(); 
-    console.log("✅ All models synced.");
+    // Avoid schema sync in production to reduce startup work and memory
+    if (process.env.NODE_ENV !== 'production') {
+      await sequelize.sync();
+      console.log('All models synced.');
+    }
 
     // ---- CREATE DEFAULT ADMIN (ONLY ONCE) ----
-    const adminEmail ="abhishinde5458@gmail.com";
+    const adminEmail = 'abhishinde5458@gmail.com';
 
-    // Check if admin already exists
     const existingAdmin = await User.findOne({ where: { email: adminEmail } });
-
     if (!existingAdmin) {
-      // Create admin only if not exists
       await User.create({
-        firstName: "abhishek",
-        lastName: "shinde",
-        gender: "male",
-        email: "abhishinde5458@gmail.com",
-        mobileNo: "7385331672",
-        role: "admin",
+        firstName: 'abhishek',
+        lastName: 'shinde',
+        gender: 'male',
+        email: adminEmail,
+        mobileNo: '7385331672',
+        role: 'admin',
       });
-
-      console.log("👑 Admin user created successfully!");
+      console.log('Admin user created successfully!');
     } else {
-      console.log("✅ Admin user already exists, skipping creation.");
+      console.log('Admin user already exists, skipping creation.');
     }
 
     // Start server
     const PORT = process.env.PORT || 5000;
     app.listen(PORT, () => {
-      console.log("🚀 Server running on port ${PORT}");
+      console.log(`Server running on port ${PORT}`);
     });
-
   } catch (error) {
-    console.error("❌ Unable to connect to the database:", error);
+    console.error('Unable to connect to the database:', error);
   }
 })();
+
