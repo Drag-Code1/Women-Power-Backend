@@ -13,4 +13,8 @@ router.get("/", auth("admin"), (req, res, next) =>
   OrderController.getAllOrders(req, res, next)
 );
 
+router.put("/:id/cancel", auth("user"), (req, res, next) =>
+  OrderController.cancelOrder(req, res, next)
+);
+
 module.exports = router;

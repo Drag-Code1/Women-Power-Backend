@@ -34,9 +34,15 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: sequelize.literal("CURRENT_TIMESTAMP"),
       },
       status: {
-        type: DataTypes.ENUM("delivered", "shipped", "processing"),
+        type: DataTypes.ENUM(
+          "pending",
+          "processing",
+          "shipped",
+          "delivered",
+          "cancelled"
+        ),
         allowNull: false,
-        defaultValue: "processing",
+        defaultValue: "pending",
       },
       address_id: {
         type: DataTypes.UUID,
@@ -45,9 +51,27 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: "CASCADE",
       },
       payment_status: {
-        type: DataTypes.ENUM("paid", "unpaid"),
+        type: DataTypes.ENUM("pending", "paid", "failed", "refunded"),
         allowNull: false,
-        defaultValue: "paid",
+        defaultValue: "pending",
+      },
+      payment_method: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      transaction_id: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      amount: {
+        type: DataTypes.DECIMAL(10, 2),
+        allowNull: false,
+        defaultValue: 0.0,
+      },
+      currency: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        defaultValue: "INR",
       },
     },
     {

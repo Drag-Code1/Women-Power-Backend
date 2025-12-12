@@ -14,8 +14,15 @@ class OrderService {
   async addNewOrder(data) {
     const t = await sequelize.transaction();
     try {
-      const { user_id, address_id, orderItems } = data;
-      const orderData = { user_id, address_id };
+      const { user_id, address_id, orderItems, amount } = data;
+      // Default to pending for both
+      const orderData = {
+        user_id,
+        address_id,
+        amount: amount || 0,
+        status: 'pending',
+        payment_status: 'pending'
+      };
 
       const order = await this.orderRepo.create(orderData, { transaction: t });
 
@@ -53,6 +60,29 @@ class OrderService {
   async getAllOrders() {
     try {
       const response = await this.orderRepo.getAllRecent();
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  // 4. Cancel Order
+  async cancelOrder(orderId) {
+    try {
+      const order = await this.orderRepo.get(orderId);
+      if (!order) {
+        throw new AppError("Order not found", StatusCodes.NOT_FOUND);
+      }
+
+      // Check logic if order can be cancelled (e.g. not already shipped)
+      if (order.status === 'shipped' || order.status === 'delivered') {
+        throw new AppError("Cannot cancel shipped or delivered order", StatusCodes.BAD_REQUEST);
+      }
+
+      const response = await this.orderRepo.update(orderId, {
+        status: 'cancelled',
+        // Optionally trigger refund logic here if payment_status was 'paid'
+      });
       return response;
     } catch (error) {
       throw error;

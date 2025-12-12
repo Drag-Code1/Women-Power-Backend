@@ -40,6 +40,18 @@ class OrderController {
       next(error);
     }
   }
+
+  //4. cancel order
+  async cancelOrder(req, res, next) {
+    try {
+      const response = await orderServ.cancelOrder(req.params.id);
+      return res
+        .status(StatusCodes.OK)
+        .json(success(response, "Order cancelled successfully"));
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 module.exports = new OrderController();
