@@ -10,7 +10,12 @@ class AddressService {
   //1.create new address
   async newAddress(data) {
     try {
-      const response = await this.addressRepository.create(data);
+      // Normalize type to allowed enum values
+      const normalizedType =
+        data.type === "Work" ? "Office" : data.type === "Office" ? "Office" : "Home";
+
+      const payload = { ...data, type: normalizedType };
+      const response = await this.addressRepository.create(payload);
       return response;
     } catch (error) {
       throw new AppError(
@@ -28,6 +33,10 @@ class AddressService {
     } catch (error) {
       throw new AppError("address not found", StatusCodes.NOT_FOUND);
     }
+  }
+
+  async getAddressById(id) {
+    return this.addressRepository.get(id);
   }
 
   //3.update address

@@ -7,9 +7,9 @@ class CrudRepository {
   }
 
   //create
-  async create(data) {
+  async create(data, options = {}) {
     try {
-      const response = await this.model.create(data);
+      const response = await this.model.create(data, options);
       return response;
     } catch (error) {
       throw new AppError(
@@ -20,8 +20,8 @@ class CrudRepository {
   }
 
   //destroy
-  async destroy(id) {
-    const response = await this.model.destroy({ where: { id } });
+  async destroy(id, options = {}) {
+    const response = await this.model.destroy({ where: { id }, ...options });
     if (!response) {
       throw new AppError("Resourse not found", StatusCodes.NOT_FOUND);
     }
@@ -29,8 +29,8 @@ class CrudRepository {
   }
 
   //get by id
-  async get(id) {
-    const response = await this.model.findByPk(id);
+  async get(id, options = {}) {
+    const response = await this.model.findByPk(id, options);
     if (!response) {
       throw new AppError("Resourse not found", StatusCodes.NOT_FOUND);
     }
@@ -38,17 +38,17 @@ class CrudRepository {
   }
 
   //getAll
-  async getAll() {
-    return this.model.findAll();
+  async getAll(options = {}) {
+    return this.model.findAll(options);
   }
 
   //update
-  async update(id, data) {
-    const [updated] = await this.model.update(data, { where: { id } });
+  async update(id, data, options = {}) {
+    const [updated] = await this.model.update(data, { where: { id }, ...options });
     if (!updated) {
       throw new AppError("Resourse not found", StatusCodes.NOT_FOUND);
     }
-    return await this.model.findByPk(id);
+    return await this.model.findByPk(id, options);
   }
 }
 

@@ -8,7 +8,14 @@ class AddressController {
   //1.create
   async newAddress(req, res, next) {
     try {
-      const response = await addServ.newAddress(req.body);
+      const userId = req.user?.id;
+      if (!userId) {
+        return res
+          .status(StatusCodes.UNAUTHORIZED)
+          .json({ success: false, message: "Unauthorized" });
+      }
+
+      const response = await addServ.newAddress({ ...req.body, userId });
       return res
         .status(StatusCodes.CREATED)
         .json(success(response, "Address saved"));
@@ -20,7 +27,20 @@ class AddressController {
   //2.find all by user Id
   async getAddressByUserId(req, res, next) {
     try {
-      const response = await addServ.getAddressesByUserId(req.params.id);
+      const requester = req.user;
+      const userId = req.params.id;
+      if (!requester) {
+        return res
+          .status(StatusCodes.UNAUTHORIZED)
+          .json({ success: false, message: "Unauthorized" });
+      }
+      if (requester.role !== "admin" && requester.id !== userId) {
+        return res
+          .status(StatusCodes.FORBIDDEN)
+          .json({ success: false, message: "Forbidden" });
+      }
+
+      const response = await addServ.getAddressesByUserId(userId);
       return res
         .status(StatusCodes.OK)
         .json(success(response, "user addresses"));
@@ -32,6 +52,19 @@ class AddressController {
   //3.Update Address
   async updateAddress(req, res, next) {
     try {
+      const requester = req.user;
+      if (!requester) {
+        return res
+          .status(StatusCodes.UNAUTHORIZED)
+          .json({ success: false, message: "Unauthorized" });
+      }
+      const existing = await addServ.getAddressById(req.params.id);
+      if (requester.role !== "admin" && existing.userId !== requester.id) {
+        return res
+          .status(StatusCodes.FORBIDDEN)
+          .json({ success: false, message: "Forbidden" });
+      }
+
       const response = await addServ.updateAddress(req.params.id, req.body);
       return res
         .status(StatusCodes.OK)
@@ -44,6 +77,19 @@ class AddressController {
   //4.Dalete Address
   async deleteAddress(req, res, next) {
     try {
+      const requester = req.user;
+      if (!requester) {
+        return res
+          .status(StatusCodes.UNAUTHORIZED)
+          .json({ success: false, message: "Unauthorized" });
+      }
+      const existing = await addServ.getAddressById(req.params.id);
+      if (requester.role !== "admin" && existing.userId !== requester.id) {
+        return res
+          .status(StatusCodes.FORBIDDEN)
+          .json({ success: false, message: "Forbidden" });
+      }
+
       const response = await addServ.deleteAddress(req.params.id);
       return res
         .status(StatusCodes.OK)

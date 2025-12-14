@@ -30,11 +30,9 @@ class WishListRepository extends CrudRepository {
         ],
       });
 
+      // Empty wishlist is not an error; return empty array
       if (!response || response.length === 0) {
-        throw new AppError(
-          "No wishlist items found for this user",
-          StatusCodes.NOT_FOUND
-        );
+        return [];
       }
 
       // Format response and add is_in_wishlist flag
@@ -43,7 +41,7 @@ class WishListRepository extends CrudRepository {
         user_id: item.user_id,
         product: {
           ...item.Product.toJSON(),
-          is_in_wishlist: true, // ✅ add this flag manually
+          is_in_wishlist: true, // mark as saved
         },
       }));
 

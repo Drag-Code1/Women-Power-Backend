@@ -17,6 +17,7 @@ const order_router = require("./order-route");
 const dashboard_router = require("./dashboard-route");
 const wishlist_router = require("./wishlist-route");
 const r2 = require("./r2-route");
+const payment_router = require("./payment-route");
 
 const router = express.Router();
 
@@ -37,5 +38,6 @@ router.use("/order", order_router);
 router.use("/dashboard", dashboard_router);
 router.use("/wishlist", wishlist_router);
 router.use("/r2", r2);
+router.use("/payment", payment_router);
 
 module.exports = router;

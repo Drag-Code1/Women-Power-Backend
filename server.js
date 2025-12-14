@@ -37,16 +37,16 @@ app.use(errorHandler);
     }
 
     // ---- CREATE DEFAULT ADMIN (ONLY ONCE) ----
-    const adminEmail = 'abhishinde5458@gmail.com';
+    const adminEmail = 'rushilodhe002@gmail.com';
 
     const existingAdmin = await User.findOne({ where: { email: adminEmail } });
     if (!existingAdmin) {
       await User.create({
-        firstName: 'abhishek',
-        lastName: 'shinde',
+        firstName: 'rushi',
+        lastName: 'lodhe',
         gender: 'male',
         email: adminEmail,
-        mobileNo: '7385331672',
+        mobileNo: '9699702627',
         role: 'admin',
       });
       console.log('Admin user created successfully!');
