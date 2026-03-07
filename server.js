@@ -8,10 +8,10 @@ const errorHandler = require('./src/middleware/errorHandler');
 
 const app = express();
 
+app.use(cors());
 // Limit body sizes to avoid memory spikes from large payloads
 app.use(express.json({ limit: '200kb' }));
 app.use(express.urlencoded({ extended: true, limit: '200kb' }));
-app.use(cors());
 
 // Default route
 app.get('/', (req, res) => {
