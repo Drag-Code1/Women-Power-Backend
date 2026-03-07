@@ -12,9 +12,13 @@ class CrudRepository {
       const response = await this.model.create(data, options);
       return response;
     } catch (error) {
+      let message = error.message || "Failed to create resource";
+      if (error.name === 'SequelizeUniqueConstraintError' || error.name === 'SequelizeValidationError') {
+        message = error.errors.map(e => e.message).join(', ');
+      }
       throw new AppError(
-        "Failed to create resourse",
-        StatusCodes.INTERNAL_SERVER_ERROR
+        message,
+        error.statusCode || StatusCodes.INTERNAL_SERVER_ERROR
       );
     }
   }

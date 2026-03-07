@@ -26,9 +26,10 @@ class UserService {
 
       return safeUser;
     } catch (error) {
+      console.error('Error creating user:', error);
       throw new AppError(
-        "Failed to create user",
-        StatusCodes.INTERNAL_SERVER_ERROR
+        error.message || "Failed to create user",
+        error.statusCode || StatusCodes.INTERNAL_SERVER_ERROR
       );
     }
   }
