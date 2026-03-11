@@ -58,6 +58,16 @@ class OrderService {
       throw error;
     }
   }
+
+  //4.get order detail by id
+  async getOrderDetail(id) {
+    try {
+      const response = await this.orderRepo.getDetailedById(id);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 module.exports = OrderService;

@@ -40,6 +40,18 @@ class OrderController {
       next(error);
     }
   }
+
+  //4.get order detail by id
+  async getOrderDetail(req, res, next) {
+    try {
+      const response = await orderServ.getOrderDetail(req.params.id);
+      return res
+        .status(StatusCodes.OK)
+        .json(success(response, "Order detail retrived"));
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 module.exports = new OrderController();

@@ -6,6 +6,9 @@ const auth = require("../middleware/auth-middleware");
 router.post("/", auth("user"), (req, res, next) =>
   OrderController.newOrder(req, res, next)
 );
+router.get("/details/:id", auth(["user", "admin"]), (req, res, next) =>
+  OrderController.getOrderDetail(req, res, next)
+);
 router.get("/:id", auth(["user", "admin"]), (req, res, next) =>
   OrderController.getOrders(req, res, next)
 );
