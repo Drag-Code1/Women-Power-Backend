@@ -114,6 +114,53 @@ class OrderService {
           subject,
           htmlContent
         );
+
+        // Send order confirmation email to the user (customer)
+        if (userEmail && userEmail !== "N/A") {
+          const userSubject = `Order Confirmation #${order.id} - Women Power`;
+          const userHtmlContent = `
+            <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; max-width: 650px; margin: auto; border: 1px solid #e0e0e0; padding: 30px; border-radius: 12px; background-color: #fff;">
+              <div style="text-align: center; margin-bottom: 25px;">
+                <h1 style="color: #d81b60; margin-bottom: 5px; font-size: 28px;">Order Confirmed!</h1>
+                <p style="color: #666; font-size: 16px;">Order ID: <strong>#${order.id}</strong></p>
+              </div>
+              
+              <p style="font-size: 16px;">Hello ${userName},</p>
+              <p style="font-size: 16px;">Thank you for your order on <strong>Women Power</strong>. Your order has been successfully placed and is confirmed!</p>
+              
+              <div style="background-color: #f3f4f6; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                <h3 style="color: #374151; margin-top: 0; border-bottom: 1px solid #d1d5db; padding-bottom: 10px;">Order Summary</h3>
+                <table style="width: 100%; border-collapse: collapse;">
+                  <tr>
+                    <td style="padding: 8px 0; color: #555; width: 40%;"><strong>Product(s):</strong></td>
+                    <td style="padding: 8px 0; color: #333;">${productNames}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 8px 0; color: #555;"><strong>Delivery Address:</strong></td>
+                    <td style="padding: 8px 0; color: #333;">${userAddress}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 8px 0; color: #555; font-size: 18px;"><strong>Total Amount:</strong></td>
+                    <td style="padding: 8px 0; color: #d81b60; font-size: 18px;"><strong>₹${totalAmount}</strong></td>
+                  </tr>
+                </table>
+              </div>
+
+              <p style="font-size: 16px;">We will notify you once your order is dispatched.</p>
+
+              <div style="text-align: center; margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px;">
+                <p style="font-size: 14px; color: #888;">Thank you for shopping with us!</p>
+                <p style="font-size: 12px; color: #aaa; margin-top: 10px;">&copy; ${new Date().getFullYear()} Women Power. All rights reserved.</p>
+              </div>
+            </div>
+          `;
+
+          await MailService.sendMail(
+            userEmail,
+            userSubject,
+            userHtmlContent
+          );
+        }
       } catch (mailError) {
         console.error("Failed to send order notification email:", mailError);
         // We don't throw here to avoid failing the order creation if only email fails

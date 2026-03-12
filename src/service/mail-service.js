@@ -4,7 +4,7 @@ class MailService {
   async sendMail(to, subject, htmlContent) {
     try {
       const mailOptions = {
-        from: `"Women Power App" <${process.env.EMAIL_USER}>`,
+        from: `"Woman.ej" <${process.env.EMAIL_USER}>`,
         to,
         subject,
         html: htmlContent,
