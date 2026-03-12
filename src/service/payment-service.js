@@ -274,7 +274,7 @@ class PaymentService {
         `;
 
         await MailService.sendMail(
-          "team@womanej.com",
+          "namrtaguptadelhi@gmail.com",
           subject,
           htmlContent
         );
