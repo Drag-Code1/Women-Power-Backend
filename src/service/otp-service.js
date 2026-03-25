@@ -27,7 +27,12 @@ class OtpService {
     try {
       const response = await this.otpRepository.get(data.email);
 
-      const user = await this.userRepo.getUserByMail(data.email);
+      let user;
+      try {
+        user = await this.userRepo.getUserByMail(data.email);
+      } catch (err) {
+        return { login: false, message: "Please sign up first, then login." };
+      }
 
       const { expiry, otp } = response.get();
 
