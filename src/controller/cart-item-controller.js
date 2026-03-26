@@ -70,11 +70,14 @@ class CartItemController {
   //4.delete item
   async deleteItem(req, res, next) {
     try {
+      console.log('🗑️ Deleting cart item ID:', req.params.id);
       const response = await itemServ.deleteCartItem(req.params.id);
+      console.log('✅ Deleted successfully:', response);
       return res
         .status(StatusCodes.OK)
         .json(success(response, "item deleted."));
     } catch (error) {
+      console.error('❌ Error deleting cart item:', error.message);
       next(error);
     }
   }
