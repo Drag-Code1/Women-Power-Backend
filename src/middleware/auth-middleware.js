@@ -28,6 +28,7 @@ module.exports = (roles = []) => {
 
       next();
     } catch (error) {
+      console.error("JWT Verification failed:", error.message);
       return next(
         new AppError("Invalid or expired token", StatusCodes.UNAUTHORIZED)
       );

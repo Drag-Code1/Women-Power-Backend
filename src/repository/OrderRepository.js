@@ -23,7 +23,7 @@ class OrderRepository extends CrudRepository {
             attributes: ["address", "city", "state", "pincode", "mobileNo", "type"],
           },
         ],
-        order: [["order_date", "DESC"]],
+        order: [["order_date", "DESC"], ["id", "DESC"]],
       });
 
       // Format the response
@@ -77,7 +77,7 @@ class OrderRepository extends CrudRepository {
             attributes: ["address", "city", "state", "pincode", "mobileNo", "type"],
           },
         ],
-        order: [["order_date", "DESC"]],
+        order: [["order_date", "DESC"], ["id", "DESC"]],
       });
 
       // Format the response

@@ -57,6 +57,7 @@ class OrderService {
             <div style="text-align: center; margin-bottom: 25px;">
               <h1 style="color: #d81b60; margin-bottom: 5px; font-size: 28px;">New Order Received!</h1>
               <p style="color: #666; font-size: 16px;">Order ID: <strong>#${order.id}</strong></p>
+              <p style="color: #666; font-size: 14px;">Date: <strong>${new Date().toLocaleString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true })}</strong></p>
             </div>
             
             <p style="font-size: 16px;">Hello Admin,</p>
@@ -123,6 +124,7 @@ class OrderService {
               <div style="text-align: center; margin-bottom: 25px;">
                 <h1 style="color: #d81b60; margin-bottom: 5px; font-size: 28px;">Order Confirmed!</h1>
                 <p style="color: #666; font-size: 16px;">Order ID: <strong>#${order.id}</strong></p>
+                <p style="color: #666; font-size: 14px;">Date: <strong>${new Date().toLocaleString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true })}</strong></p>
               </div>
               
               <p style="font-size: 16px;">Hello ${userName},</p>
