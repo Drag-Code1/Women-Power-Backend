@@ -90,8 +90,8 @@ class OrderRepository extends CrudRepository {
         return {
           id: order.id,
           order_date: order.order_date,
-          firstName: order.User.firstName,
-          lastName: order.User.lastName,
+          firstName: order.User ? order.User.firstName : "Guest",
+          lastName: order.User ? order.User.lastName : "User",
           productCount,
           totalPrice: totalPrice.toFixed(2),
           address_id: order.address_id,
