@@ -10,7 +10,10 @@ class OrderItemRepository extends CrudRepository {
 
   async createMultiple(data, options = {}) {
     try {
-      const response = await this.model.bulkCreate(data, { ...options });
+      const response = await this.model.bulkCreate(data, {
+        ...options,
+        individualHooks: true,
+      });
       return response;
     } catch (error) {
       throw new AppError(

@@ -18,8 +18,7 @@ module.exports = (sequelize, DataTypes) => {
   Order.init(
     {
       id: {
-        type: DataTypes.UUID,
-        defaultValue: DataTypes.UUIDV4,
+        type: DataTypes.STRING,
         primaryKey: true,
       },
       user_id: {
@@ -55,6 +54,14 @@ module.exports = (sequelize, DataTypes) => {
       modelName: "Order",
       tableName: "orders",
       timestamps: false,
+      hooks: {
+        beforeCreate: async (order) => {
+          if (!order.id) {
+            const randomNum = Math.floor(100000 + Math.random() * 900000);
+            order.id = `WM-ORD-${randomNum}`;
+          }
+        },
+      },
     }
   );
 

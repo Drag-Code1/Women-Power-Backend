@@ -11,7 +11,7 @@ module.exports = {
         defaultValue: Sequelize.UUIDV4,
       },
       order_id: {
-        type: Sequelize.UUID,
+        type: Sequelize.STRING,
         allowNull: false,
         references: { model: "orders", key: "id" },
         onDelete: "CASCADE",

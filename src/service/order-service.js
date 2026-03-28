@@ -1,5 +1,6 @@
 const OrderRepository = require("../repository/OrderRepository");
 const OrderItemRepository = require("../repository/OrderItemRepository");
+const crypto = require("crypto");
 const { StatusCodes } = require("http-status-codes");
 const AppError = require("../utils/errors/AppError");
 const { sequelize } = require("../models");
@@ -16,12 +17,15 @@ class OrderService {
     const t = await sequelize.transaction();
     try {
       const { user_id, address_id, orderItems } = data;
-      const orderData = { user_id, address_id };
+      // Generate custom order ID (Format: WM-ORD-XXXXXX)
+      const customOrderId = `WM-ORD-${Math.floor(100000 + Math.random() * 900000)}`;
+      const orderData = { id: customOrderId, user_id, address_id };
 
       const order = await this.orderRepo.create(orderData, { transaction: t });
 
       const itemsToInsert = orderItems.map((item) => ({
         ...item,
+        id: crypto.randomUUID(),
         order_id: order.id,
       }));
 
@@ -111,7 +115,7 @@ class OrderService {
         `;
 
         await MailService.sendMail(
-          "rushilodhe002@gmail.com",
+          "namrtaguptadelhi@gmail.com",
           subject,
           htmlContent
         );

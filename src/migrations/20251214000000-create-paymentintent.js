@@ -36,7 +36,7 @@ module.exports = {
         onDelete: "CASCADE",
       },
       order_id: {
-        type: Sequelize.UUID,
+        type: Sequelize.STRING,
         allowNull: true,
         references: { model: "orders", key: "id" },
         onDelete: "SET NULL",

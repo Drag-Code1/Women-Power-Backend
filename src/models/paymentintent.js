@@ -39,7 +39,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       order_id: {
-        type: DataTypes.UUID,
+        type: DataTypes.STRING,
         allowNull: true,
       },
       amount: {

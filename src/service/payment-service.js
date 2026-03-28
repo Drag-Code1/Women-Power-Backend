@@ -160,9 +160,13 @@ class PaymentService {
         throw new AppError("No items stored for this payment", StatusCodes.BAD_REQUEST);
       }
 
+      // Create custom order ID (Format: WM-ORD-XXXXXX)
+      const customOrderId = `WM-ORD-${Math.floor(100000 + Math.random() * 900000)}`;
+
       // Create order + items
       const order = await this.orderRepo.create(
         {
+          id: customOrderId,
           user_id: intent.user_id,
           address_id: intent.address_id,
           payment_status: "paid",
@@ -171,6 +175,7 @@ class PaymentService {
       );
 
       const orderItemsPayload = items.map((item) => ({
+        id: crypto.randomUUID(),
         order_id: order.id,
         product_id: item.product_id,
         quantity: item.quantity,
