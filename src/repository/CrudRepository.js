@@ -48,9 +48,15 @@ class CrudRepository {
 
   //update
   async update(id, data, options = {}) {
-    const [updated] = await this.model.update(data, { where: { id }, ...options });
+    const [updated] = await this.model.update(data, {
+      where: { id },
+      ...options,
+    });
     if (!updated) {
-      throw new AppError("Resourse not found", StatusCodes.NOT_FOUND);
+      const exists = await this.model.findByPk(id);
+      if (!exists) {
+        throw new AppError("Resourse not found", StatusCodes.NOT_FOUND);
+      }
     }
     return await this.model.findByPk(id, options);
   }
