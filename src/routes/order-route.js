@@ -15,5 +15,8 @@ router.get("/:id", auth(["user", "admin"]), (req, res, next) =>
 router.get("/", auth("admin"), (req, res, next) =>
   OrderController.getAllOrders(req, res, next)
 );
+router.patch("/:id/status", auth("admin"), (req, res, next) =>
+  OrderController.updateStatus(req, res, next)
+);
 
 module.exports = router;

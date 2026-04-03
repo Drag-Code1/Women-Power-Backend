@@ -94,6 +94,7 @@ class OrderRepository extends CrudRepository {
           lastName: order.User ? order.User.lastName : "User",
           productCount,
           totalPrice: totalPrice.toFixed(2),
+          status: order.status,
           address_id: order.address_id,
           address: order.Address ? {
             address: order.Address.address,

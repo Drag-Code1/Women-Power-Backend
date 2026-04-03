@@ -33,7 +33,7 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: sequelize.literal("CURRENT_TIMESTAMP"),
       },
       status: {
-        type: DataTypes.ENUM("delivered", "shipped", "processing"),
+        type: DataTypes.ENUM("delivered", "shipped", "processing", "rejected", "completed"),
         allowNull: false,
         defaultValue: "processing",
       },

@@ -32,7 +32,7 @@ app.use(errorHandler);
 
     // Avoid schema sync in production to reduce startup work and memory
     if (process.env.NODE_ENV !== 'production') {
-      await sequelize.sync();
+      await sequelize.sync({ alter: true });
       console.log('All models synced.');
     }
 

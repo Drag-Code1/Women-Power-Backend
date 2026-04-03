@@ -52,6 +52,18 @@ class OrderController {
       next(error);
     }
   }
+
+  //5.update order status
+  async updateStatus(req, res, next) {
+    try {
+      const response = await orderServ.updateOrderStatus(req.params.id, req.body.status);
+      return res
+        .status(StatusCodes.OK)
+        .json(success(response, "Order status updated"));
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 module.exports = new OrderController();

@@ -211,6 +211,16 @@ class OrderService {
       throw error;
     }
   }
+  
+  //5.update order status
+  async updateOrderStatus(id, status) {
+    try {
+      const response = await this.orderRepo.update(id, { status });
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 module.exports = OrderService;
